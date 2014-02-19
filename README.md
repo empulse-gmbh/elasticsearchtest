@@ -17,6 +17,8 @@ In this simple example we have a FoodTruck which is in a certain place in a cert
 #Service explanation
 We tried two different implementations using spring-data-elasticsearch: Criterias and QueryBuilders.
 
+Criteria queries are only for simple cases and are not approriate for nested queries!
+
 Additionally we used Spring Java Configuration which starts an embedded Elasticsearch instance.
 
 Just run the JUnit test FoodTruckServiceImplTest.
@@ -24,4 +26,6 @@ Just run the JUnit test FoodTruckServiceImplTest.
 #What works / not works
 Currently the LIKE search for description in FoodTruck works.
 
-The search by TimeRange or by latitude/longitude in LocationPoint does not work.
+The search by TimeRange works.
+
+The search geo_distance in location does not work.

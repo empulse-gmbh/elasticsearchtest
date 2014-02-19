@@ -3,23 +3,24 @@
  */
 package de.empulse.elastictest.searchexample.service.impl;
 
+import static org.elasticsearch.index.query.FilterBuilders.geoDistanceFilter;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.fuzzyLikeThisFieldQuery;
+import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.FilterBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-
-import com.spatial4j.core.context.SpatialContext;
-import com.spatial4j.core.distance.DistanceUtils;
-import com.spatial4j.core.shape.impl.CircleImpl;
-import com.spatial4j.core.shape.impl.PointImpl;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 
 import de.empulse.elastictest.searchexample.model.FoodTruck;
 import de.empulse.elastictest.searchexample.model.TimeRange;
@@ -151,9 +152,8 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		 */
 		if (StringUtils.isNotBlank(foodTruckSearch.getDescriptionLike())) {
 
-			searchQuery.must(
-					fuzzyLikeThisFieldQuery("description").likeText(
-							foodTruckSearch.getDescriptionLike()));
+			searchQuery.must(fuzzyLikeThisFieldQuery("description").likeText(
+					foodTruckSearch.getDescriptionLike()));
 
 		}
 
@@ -164,55 +164,50 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		TimeRange searchTimeRange = foodTruckSearch.getSearchTimeRange();
 		if (searchTimeRange != null) {
 
-			String startTimePath = "locationPoint.timeRange.from";
-			String endTimePath = "locationPoint.timeRange.to";
+			String startTimePath = "location.timeRange.from";
+			String endTimePath = "location.timeRange.to";
 
 			searchQuery.must(nestedQuery(
-					"locationPoint",
+					"location.timeRange",
 					boolQuery().should(
 							rangeQuery(startTimePath).from(
 									searchTimeRange.getFrom().getTime()).to(
 									searchTimeRange.getTo().getTime())).should(
 							rangeQuery(endTimePath).from(
-									searchTimeRange.getFrom()).to(
-									searchTimeRange.getTo()))));
+									searchTimeRange.getFrom().getTime()).to(
+									searchTimeRange.getTo().getTime()))));
 
 		}
 
 		/*
 		 * add search criteria for radius search
 		 */
+		FilterBuilder searchFilter = null;
 		if (foodTruckSearch.getLatitude() != null
 				&& foodTruckSearch.getLongitude() != null) {
 
 			if (foodTruckSearch.getSearchRadiusInKilometers() == null) {
 				foodTruckSearch.setSearchRadiusInKilometers(5);
 			}
-
-			// how to match LocationPoint to point?
-			searchQuery
-					.must(nestedQuery(
-							"locationPoint",
-							boolQuery()
-									.must(geoShapeQuery(
-											"locationPoint",
-											new CircleImpl(
-													new PointImpl(
-															foodTruckSearch
-																	.getLatitude(),
-															foodTruckSearch
-																	.getLongitude(),
-															SpatialContext.GEO),
-													DistanceUtils.dist2Degrees(
-															foodTruckSearch
-																	.getSearchRadiusInKilometers(),
-															DistanceUtils.EARTH_MEAN_RADIUS_KM),
-													SpatialContext.GEO)))));
+						
+			searchFilter = geoDistanceFilter("location.point")
+					.distance(
+							foodTruckSearch.getSearchRadiusInKilometers()
+									+ "km").lat(foodTruckSearch.getLatitude())
+					.lon(foodTruckSearch.getLongitude());
 
 		}
 
-		return IteratorUtils.toList(foodTruckRepository.search(searchQuery)
-				.iterator());
+		if (searchFilter != null) {
+			NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(
+					searchQuery, searchFilter);
+			return IteratorUtils.toList(foodTruckRepository.search(
+					nativeSearchQuery).iterator());
+		} else {
+			return IteratorUtils.toList(foodTruckRepository.search(searchQuery)
+					.iterator());
+		}
+
 	}
 
 }

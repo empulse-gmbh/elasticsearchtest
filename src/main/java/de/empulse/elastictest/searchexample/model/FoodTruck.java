@@ -5,9 +5,8 @@ package de.empulse.elastictest.searchexample.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.FieldIndex;
+import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.NestedField;
 
 /**
  * FoodTruck is just an example of an model which is for a certain time at a
@@ -20,7 +19,7 @@ import org.springframework.data.elasticsearch.annotations.NestedField;
  * @author Christoph Guse
  *
  */
-@Document(indexName = "searchexample", type = "foodtruck", indexStoreType = "memory", shards = 1, replicas = 0, refreshInterval = "-1")
+@Document(indexName = "searchexample", type = "foodtruck")
 public class FoodTruck {
 
 	@Id
@@ -28,8 +27,8 @@ public class FoodTruck {
 
 	private String description;
 
-	@NestedField(type=FieldType.Object, index = FieldIndex.analyzed, store = true, dotSuffix="locationPoint")
-	private LocationPoint locationPoint;
+	@Field(type=FieldType.Nested)
+	private Location location;
 
 	/**
 	 * @return the description
@@ -49,16 +48,16 @@ public class FoodTruck {
 	/**
 	 * @return the locationPoint
 	 */
-	public LocationPoint getLocationPoint() {
-		return locationPoint;
+	public Location getLocation() {
+		return location;
 	}
 
 	/**
 	 * @param locationPoint
 	 *            the locationPoint to set
 	 */
-	public void setLocationPoint(LocationPoint locationPoint) {
-		this.locationPoint = locationPoint;
+	public void setLocation(Location locationPoint) {
+		this.location = locationPoint;
 	}
 
 	/**
@@ -89,7 +88,7 @@ public class FoodTruck {
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
-				+ ((locationPoint == null) ? 0 : locationPoint.hashCode());
+				+ ((location == null) ? 0 : location.hashCode());
 		return result;
 	}
 
@@ -117,10 +116,10 @@ public class FoodTruck {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (locationPoint == null) {
-			if (other.locationPoint != null)
+		if (location == null) {
+			if (other.location != null)
 				return false;
-		} else if (!locationPoint.equals(other.locationPoint))
+		} else if (!location.equals(other.location))
 			return false;
 		return true;
 	}

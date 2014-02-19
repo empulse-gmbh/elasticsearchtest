@@ -9,7 +9,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.elasticsearch.common.geo.GeoPoint;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import de.empulse.elastictest.searchexample.model.FoodTruck;
 import de.empulse.elastictest.searchexample.model.builder.FoodTruckBuilder;
-import de.empulse.elastictest.searchexample.model.builder.LocationPointBuilder;
+import de.empulse.elastictest.searchexample.model.builder.LocationBuilder;
 import de.empulse.elastictest.searchexample.model.builder.TimeRangeBuilder;
 import de.empulse.elastictest.searchexample.repository.FoodTruckRepository;
 import de.empulse.elastictest.searchexample.service.FoodTruckSearch;
@@ -56,11 +58,10 @@ public class FoodTruckServiceImplTest {
 				.foodTruck()
 				.withDescription("A very nice truck")
 				.withLocationPoint(
-						LocationPointBuilder
-								.locationPoint()
+						LocationBuilder
+								.location()
 								.withAddress("Cologne City")
-								.withLatitude(50.9406645)
-								.withLongitude(6.9599115)
+								.withPoint(new GeoPoint(50.9406645, 6.9599115))
 								.withTimeRange(
 										TimeRangeBuilder.timeRange()
 												.withFrom(createTime(8, 30))
@@ -78,6 +79,11 @@ public class FoodTruckServiceImplTest {
 	}
 	
 
+	/**
+	 * Criteria is intended to be used for very simple queries only, not for nested documents, see 
+	 * http://stackoverflow.com/questions/21778849/spring-data-elasticsearch-using-criteria-with-nested-objects
+	 */
+	@Ignore
 	@Test
 	public void testFindFoodTrucksUsingCriteria() {
 
@@ -88,11 +94,10 @@ public class FoodTruckServiceImplTest {
 				.foodTruck()
 				.withDescription("A very nice truck")
 				.withLocationPoint(
-						LocationPointBuilder
-								.locationPoint()
+						LocationBuilder
+								.location()
 								.withAddress("Cologne City")
-								.withLatitude(50.9406645)
-								.withLongitude(6.9599115)
+								.withPoint(new GeoPoint(50.9406645, 6.9599115))
 								.withTimeRange(
 										TimeRangeBuilder.timeRange()
 												.withFrom(createTime(8, 30))
@@ -141,11 +146,9 @@ public class FoodTruckServiceImplTest {
 				.foodTruck()
 				.withDescription("A very nice truck")
 				.withLocationPoint(
-						LocationPointBuilder
-								.locationPoint()
-								.withAddress("Cologne City")
-								.withLatitude(50.9406645)
-								.withLongitude(6.9599115)
+						LocationBuilder
+								.location()
+								.withAddress("Cologne City").withPoint(new GeoPoint(50.9406645, 6.9599115))
 								.withTimeRange(
 										TimeRangeBuilder.timeRange()
 												.withFrom(createTime(8, 30))
@@ -170,7 +173,7 @@ public class FoodTruckServiceImplTest {
 		search.setSearchTimeRange(TimeRangeBuilder.timeRange().withFrom(createTime(9, 0)).withTo(createTime(14, 00)).build());
 		
 		trucks = foodTruckService.findFoodTrucksUsingQueryBuilder(search);
-		assertFalse("truck expected to be found", trucks.isEmpty());
+		assertFalse("truck expected to be found searching by timerange", trucks.isEmpty());
 		
 		/*
 		 * search for all trucks in 10 km radius.
@@ -181,12 +184,12 @@ public class FoodTruckServiceImplTest {
 		search.setSearchRadiusInKilometers(10);
 		
 		trucks = foodTruckService.findFoodTrucksUsingQueryBuilder(search);
-		assertFalse(trucks.isEmpty());
+		assertFalse("truck expected to be found searching by radius", trucks.isEmpty());
 	}
 
 	/**
 	 * Creates a Date filled with time only. All information except hour and
-	 * minutes are set to 0.
+	 * minutes are set to 0, year is set to 2000.
 	 * 
 	 * @param hour
 	 * @param minutes

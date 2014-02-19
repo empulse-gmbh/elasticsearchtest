@@ -8,7 +8,7 @@
 package de.empulse.elastictest.searchexample.model.builder;
 
 import de.empulse.elastictest.searchexample.model.FoodTruck;
-import de.empulse.elastictest.searchexample.model.LocationPoint;
+import de.empulse.elastictest.searchexample.model.Location;
 
 public class FoodTruckBuilder extends FoodTruckBuilderBase<FoodTruckBuilder> {
 	public static FoodTruckBuilder foodTruck() {
@@ -43,8 +43,8 @@ class FoodTruckBuilderBase<GeneratorT extends FoodTruckBuilderBase<GeneratorT>> 
 	}
 
 	@SuppressWarnings("unchecked")
-	public GeneratorT withLocationPoint(LocationPoint aValue) {
-		instance.setLocationPoint(aValue);
+	public GeneratorT withLocationPoint(Location aValue) {
+		instance.setLocation(aValue);
 
 		return (GeneratorT) this;
 	}

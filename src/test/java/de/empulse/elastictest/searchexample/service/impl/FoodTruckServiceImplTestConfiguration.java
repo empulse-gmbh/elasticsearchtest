@@ -72,7 +72,7 @@ public class FoodTruckServiceImplTestConfiguration implements InitializingBean,
 	public void afterPropertiesSet() throws Exception {
 
 		// start elasticsearch node
-		elasticSearchNode = NodeBuilder.nodeBuilder().local(true).build();
+		elasticSearchNode = NodeBuilder.nodeBuilder().clusterName("foodtruck-test").local(true).build();
 		elasticSearchNode.start();
 
 	}

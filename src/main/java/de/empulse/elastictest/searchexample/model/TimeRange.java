@@ -5,6 +5,7 @@ package de.empulse.elastictest.searchexample.model;
 
 import java.util.Date;
 
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
@@ -17,10 +18,10 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  */
 public class TimeRange {
 
-	@Field(type=FieldType.Date)
+	@Field(type=FieldType.Date, format=DateFormat.hour_minute)
 	private Date from;
 	
-	@Field(type=FieldType.Date)
+	@Field(type=FieldType.Date, format=DateFormat.hour_minute)
 	private Date to;
 
 	public Date getFrom() {
