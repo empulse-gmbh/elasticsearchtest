@@ -8,8 +8,8 @@
 package de.empulse.elastictest.searchexample.model.builder;
 
 import de.empulse.elastictest.searchexample.model.Location;
+import de.empulse.elastictest.searchexample.model.Point;
 import de.empulse.elastictest.searchexample.model.TimeRange;
-import org.elasticsearch.common.geo.GeoPoint;
 
 public class LocationBuilder extends LocationBuilderBase<LocationBuilder> {
 	public static LocationBuilder location() {
@@ -51,7 +51,7 @@ class LocationBuilderBase<GeneratorT extends LocationBuilderBase<GeneratorT>> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public GeneratorT withPoint(GeoPoint aValue) {
+	public GeneratorT withPoint(Point aValue) {
 		instance.setPoint(aValue);
 
 		return (GeneratorT) this;

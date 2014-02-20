@@ -26,16 +26,6 @@ public interface FoodTruckService {
 	/**
 	 * Gets all {@link FoodTruck}s matching the given search criteria.
 	 * 
-	 * Criteria is only available for simple queries, not for nested queries.
-	 * 
-	 * @param foodTruckSearch
-	 * @return
-	 */
-	List<FoodTruck> findFoodTrucksUsingCriteria(FoodTruckSearch foodTruckSearch);
-
-	/**
-	 * Gets all {@link FoodTruck}s matching the given search criteria.
-	 * 
 	 * @param foodTruckSearch
 	 * @return
 	 */

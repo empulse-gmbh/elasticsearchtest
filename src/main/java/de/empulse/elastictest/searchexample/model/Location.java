@@ -3,9 +3,9 @@
  */
 package de.empulse.elastictest.searchexample.model;
 
-import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 
 /**
  * A {@link Location} describes a geographic point including latitude, longitude
@@ -20,7 +20,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  */
 public class Location {
 
-	private GeoPoint point;
+	@GeoPointField
+	private Point point;
 	
 	private String address;
 
@@ -60,21 +61,18 @@ public class Location {
 	/**
 	 * @return the point
 	 */
-	public GeoPoint getPoint() {
+	public Point getPoint() {
 		return point;
 	}
 
 	/**
-	 * @param point
-	 *            the point to set
+	 * @param point the point to set
 	 */
-	public void setPoint(GeoPoint point) {
+	public void setPoint(Point point) {
 		this.point = point;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -88,9 +86,7 @@ public class Location {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -119,5 +115,7 @@ public class Location {
 			return false;
 		return true;
 	}
+
+
 
 }

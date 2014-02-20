@@ -10,10 +10,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.DefaultEntityMapper;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import de.empulse.elastictest.searchexample.repository.FoodTruckRepository;
@@ -43,15 +41,12 @@ public class FoodTruckServiceImplTestConfiguration implements InitializingBean,
 	 */
 	@Bean
 	public ElasticsearchTemplate getElasticsearchTemplate() throws Exception {
-
-		EntityMapper entityMapper = new DefaultEntityMapper();
 		
 		if(elasticSearchNode == null){
 			afterPropertiesSet();
 		}
 		
-		return new ElasticsearchTemplate(elasticSearchNode.client(),
-				entityMapper);
+		return new ElasticsearchTemplate(elasticSearchNode.client());
 	}
 
 	@Bean
@@ -87,7 +82,6 @@ public class FoodTruckServiceImplTestConfiguration implements InitializingBean,
 	public FoodTruckService getFoodTruckService() throws Exception {
 
 		FoodTruckServiceImpl service = new FoodTruckServiceImpl();
-		service.setElasticSearchTemplate(getElasticsearchTemplate());
 		service.setFoodTruckRepository(foodTruckRepository);
 
 		return service;
