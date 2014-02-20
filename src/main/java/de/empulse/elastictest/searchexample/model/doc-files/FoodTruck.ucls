@@ -4,7 +4,7 @@
   <class id="1" language="java" name="de.empulse.elastictest.searchexample.model.FoodTruck" project="elasticsearchtest" 
     file="/elasticsearchtest/src/main/java/de/empulse/elastictest/searchexample/model/FoodTruck.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="94" width="198" x="130" y="37"/>    
+    <position height="94" width="198" x="160" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -14,7 +14,7 @@
   <class id="2" language="java" name="de.empulse.elastictest.searchexample.model.Location" project="elasticsearchtest" 
     file="/elasticsearchtest/src/main/java/de/empulse/elastictest/searchexample/model/Location.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="76" width="198" x="130" y="171"/>    
+    <position height="76" width="198" x="160" y="171"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -24,17 +24,17 @@
   <class id="3" language="java" name="de.empulse.elastictest.searchexample.model.TimeRange" project="elasticsearchtest" 
     file="/elasticsearchtest/src/main/java/de/empulse/elastictest/searchexample/model/TimeRange.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="321" y="357"/>    
+    <position height="94" width="198" x="41" y="287"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="org.elasticsearch.common.geo.GeoPoint" project="elasticsearchtest" 
-    file="C:/Users/Christoph Guse/.m2/repository/org/elasticsearch/elasticsearch/1.0.0/elasticsearch-1.0.0.jar" 
-    binary="true" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="111" y="387"/>    
+  <class id="4" language="java" name="de.empulse.elastictest.searchexample.model.Point" project="elasticsearchtest" 
+    file="/elasticsearchtest/src/main/java/de/empulse/elastictest/searchexample/model/Point.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="94" width="198" x="279" y="287"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -43,18 +43,18 @@
   </class>  
   <association id="5">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="6" name="point"/>      
+      <attribute id="6" name="timeRange"/>      
       <multiplicity id="7" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="8">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="9" name="timeRange"/>      
+      <attribute id="9" name="point"/>      
       <multiplicity id="10" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="11">    
